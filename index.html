@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firely</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary: #FF6B35; /* Vibrant orange */
+            --primary-dark: #E05A2B;
+            --dark: #0F0F0F;
+            --darker: #080808;
+            --light: #F5F5F5;
+            --gray: #1E1E1E;
+            --success: #4BB543;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--dark);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .blur-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 75% 30%, rgba(255,107,53,0.15) 0%, transparent 50%);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+        
+        .logo {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), #FF9500);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.05em;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            background: linear-gradient(90deg, var(--light), #D1D1D1);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .subtitle {
+            font-size: 1.25rem;
+            opacity: 0.8;
+            margin-bottom: 3rem;
+            font-weight: 300;
+        }
+        
+        .tagline {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: rgba(255,107,53,0.2);
+            border-radius: 50px;
+            font-size: 0.9rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255,107,53,0.3);
+        }
+        
+        .button {
+            background-color: var(--primary);
+            color: var(--darker);
+            border: none;
+            padding: 0.9rem 2.2rem;
+            margin: 0.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 4px 15px rgba(255,107,53,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,107,53,0.4);
+        }
+        
+        .button:active {
+            transform: translateY(1px);
+        }
+        
+        .button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+        }
+        
+        .button:hover::after {
+            transform: translateX(100%);
+        }
+        
+        .button.secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            box-shadow: none;
+        }
+        
+        .button.secondary:hover {
+            background-color: rgba(255,107,53,0.1);
+        }
+        
+        .button-group {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .section {
+            margin: 6rem 0;
+            position: relative;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            border-radius: 3px;
+        }
+        
+        .advantages {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .advantage {
+            background-color: var(--gray);
+            padding: 2rem;
+            border-radius: 12px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .advantage::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+        
+        .advantage:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .advantage:hover::before {
+            width: 8px;
+        }
+        
+        .advantage h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .advantage p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        
+        .form-container {
+            background-color: var(--gray);
+            padding: 3rem;
+            border-radius: 16px;
+            max-width: 500px;
+            margin: 2rem auto;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+        }
+        
+        .form-title {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--darker);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            font-family: 'Inter', sans-serif;
+            color: var(--light);
+            transition: all 0.3s ease;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(255,107,53,0.2);
+        }
+        
+        .notification {
+            background-color: var(--success);
+            color: white;
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .copy-container {
+            display: flex;
+            align-items: center;
+            margin-top: 1.5rem;
+            background: var(--darker);
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .copy-text {
+            flex-grow: 1;
+            font-family: monospace;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+        
+        .copy-btn {
+            background-color: var(--primary);
+            color: var(--darker);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        footer {
+            margin-top: 6rem;
+            padding: 3rem 0;
+            text-align: center;
+            font-size: 0.9rem;
+            opacity: 0.6;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .error {
+            color: #FF4D4D;
+            font-size: 0.9rem;
+            margin-top: -1rem;
+            margin-bottom: 1rem;
+            display: none;
+            animation: shake 0.5s ease;
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+        
+        .checkbox-container input {
+            width: auto;
+            margin: 0 0.8rem 0 0;
+            accent-color: var(--primary);
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero {
+                padding: 2rem 0;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .button {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="blur-bg"></div>
+    
+    <div class="container" id="main">
+        <header>
+            <div class="logo">Firely</div>
+            <div class="nav-buttons">
+                <button class="button secondary" onclick="showLoginForm()">Log In</button>
+                <button class="button" onclick="showSignupForm()">Sign Up</button>
+            </div>
+        </header>
+        
+        <div class="hero">
+            <h1 class="animate__animated animate__fadeIn">Поиск информации<br>и снос аккаунтов</h1>
+            <p class="subtitle animate__animated animate__fadeIn animate__delay-1s">Профессиональные инструменты для ваших задач</p>
+            <span class="tagline animate__animated animate__fadeIn animate__delay-2s">только для вредителей в интернете</span>
+            
+            <div class="button-group animate__animated animate__fadeIn animate__delay-3s">
+                <a href="#advantages" class="button floating">Приобрести</a>
+                <a href="#social" class="button secondary">Соцсети</a>
+                <a href="#support" class="button secondary">Поддержка</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Advantages Section -->
+    <div class="container section" id="advantages">
+        <h2 class="section-title">Наши преимущества</h2>
+        <div class="advantages">
+            <div class="advantage animate__animated animate__fadeInUp">
+                <h3>Быстрый поиск</h3>
+                <p>Мгновенный доступ к нужной информации с нашей оптимизированной системой поиска</p>
+            </div>
+            <div class="advantage animate__animated animate__fadeInUp animate__delay-1s">
+                <h3>Простой снос</h3>
+                <p>Удаление аккаунтов в несколько кликов без сложных процедур</p>
+            </div>
+            <div class="advantage animate__animated animate__fadeInUp animate__delay-2s">
+                <h3>Полная анонимность</h3>
+                <p>Ваши действия остаются полностью конфиденциальными и защищенными</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Social Section -->
+    <div class="container section" id="social">
+        <h2 class="section-title">Наши соцсети</h2>
+        <div class="button-group">
+            <a href="https://t.me/onlinesubb" class="button floating" target="_blank">Telegram</a>
+        </div>
+    </div>
+    
+    <!-- Support Section -->
+    <div class="container section" id="support">
+        <h2 class="section-title">Поддержка</h2>
+        <div class="button-group">
+            <a href="https://t.me/onlinesubb" class="button floating" target="_blank">@onlinesubb</a>
+        </div>
+    </div>
+    
+    <!-- Login Form -->
+    <div class="container" id="loginForm" style="display: none;">
+        <div class="form-container animate__animated animate__fadeIn">
+            <h2 class="form-title">Вход в систему</h2>
+            <div class="input-group">
+                <label for="loginInput">Код доступа</label>
+                <input type="text" id="loginInput" placeholder="Введите ваш код">
+                <div class="error" id="loginError">Неверный код доступа</div>
+            </div>
+            <button class="button" onclick="checkLogin()" style="width: 100%; padding: 1rem;">Продолжить</button>
+        </div>
+    </div>
+    
+    <!-- Login Success -->
+    <div class="container" id="loginSuccess" style="display: none;">
+        <div class="form-container animate__animated animate__fadeIn">
+            <h2 class="form-title">Удаление канала</h2>
+            <p style="text-align: center; margin-bottom: 2rem; line-height: 1.6;">
+                Канал готовится к удалению.<br>
+                Это займет примерно трое суток, но может завершиться и раньше.
+            </p>
+            <a href="#refund" class="button" style="width: 100%; padding: 1rem;">Возврат средств</a>
+        </div>
+    </div>
+    
+    <!-- Refund Form -->
+    <div class="container" id="refund" style="display: none;">
+        <div class="form-container animate__animated animate__fadeIn">
+            <h2 class="form-title">Возврат средств</h2>
+            <div class="input-group">
+                <label for="refundCode">Код доступа</label>
+                <input type="text" id="refundCode" placeholder="c67e12d849e031f04b48a561a02a6075">
+                <div class="error" id="refundError">Неверный код доступа</div>
+            </div>
+            
+            <div class="input-group">
+                <label for="purchaseDate">Дата покупки</label>
+                <input type="text" id="purchaseDate" placeholder="ДД.ММ.ГГГГ">
+            </div>
+            
+            <div class="input-group">
+                <label for="reason">Причина возврата</label>
+                <input type="text" id="reason" placeholder="Опишите причину">
+            </div>
+            
+            <button class="button" onclick="submitRefund()" style="width: 100%; padding: 1rem; margin-top: 1rem;">Подать заявление</button>
+            
+            <div class="notification" id="refundNotification">
+                <p style="font-weight: 500; margin-bottom: 1rem;">Ваше заявление принято!</p>
+                <div class="copy-container">
+                    <div class="copy-text" id="copyText">049c8dc0eb</div>
+                    <button class="copy-btn" onclick="copyToClipboard()">Копировать</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Signup Form -->
+    <div class="container" id="signupForm" style="display: none;">
+        <div class="form-container animate__animated animate__fadeIn">
+            <h2 class="form-title">Регистрация</h2>
+            <div class="input-group">
+                <label for="username">Имя пользователя</label>
+                <input type="text" id="username" placeholder="Придумайте логин">
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Пароль</label>
+                <input type="password" id="password" placeholder="Не менее 8 символов">
+            </div>
+            
+            <div class="checkbox-container">
+                <input type="checkbox" id="agreeCookies" checked>
+                <label for="agreeCookies">Я согласен с использованием cookies и сохранением IP</label>
+            </div>
+            
+            <button class="button" onclick="signUp()" style="width: 100%; padding: 1rem;">Зарегистрироваться</button>
+        </div>
+    </div>
+    
+    <footer class="animate__animated animate__fadeIn animate__delay-1s">
+        <p>© 2023 Firely. Все права защищены.</p>
+    </footer>
+    
+    <script>
+        const correctCode = "c67e12d849e031f04b48a561a02a6075";
+        
+        // Show blur background when forms are open
+        function showBlurBg(show) {
+            document.querySelector('.blur-bg').style.opacity = show ? '1' : '0';
+        }
+        
+        function showLoginForm() {
+            hideAll();
+            document.getElementById('loginForm').style.display = 'block';
+            showBlurBg(true);
+        }
+        
+        function showSignupForm() {
+            hideAll();
+            document.getElementById('signupForm').style.display = 'block';
+            showBlurBg(true);
+        }
+        
+        function hideAll() {
+            document.getElementById('main').style.display = 'none';
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'none';
+            document.getElementById('loginSuccess').style.display = 'none';
+            document.getElementById('refund').style.display = 'none';
+            document.body.style.backgroundColor = 'var(--dark)';
+            showBlurBg(false);
+        }
+        
+        function checkLogin() {
+            const input = document.getElementById('loginInput').value;
+            if (input === correctCode) {
+                hideAll();
+                document.getElementById('loginSuccess').style.display = 'block';
+                showBlurBg(true);
+            } else {
+                document.body.style.backgroundColor = '#1A0A0A';
+                document.getElementById('loginError').style.display = 'block';
+                setTimeout(() => {
+                    document.body.style.backgroundColor = 'var(--dark)';
+                }, 1000);
+            }
+        }
+        
+        function submitRefund() {
+            const input = document.getElementById('refundCode').value;
+            if (input === correctCode) {
+                document.getElementById('refundNotification').style.display = 'block';
+                document.getElementById('refundError').style.display = 'none';
+            } else {
+                document.getElementById('refundError').style.display = 'block';
+            }
+        }
+        
+        function copyToClipboard() {
+            const text = document.getElementById('copyText').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                btn.textContent = 'Скопировано!';
+                setTimeout(() => {
+                    btn.textContent = 'Копировать';
+                }, 2000);
+            });
+        }
+        
+        function signUp() {
+            if (document.getElementById('agreeCookies').checked) {
+                alert('Регистрация успешна! Ваши данные сохранены.');
+                showLoginForm();
+            } else {
+                alert('Для регистрации необходимо согласие с использованием cookies');
+            }
+        }
+        
+        // Handle anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (this.getAttribute('href') === '#refund') {
+                    hideAll();
+                    document.getElementById('refund').style.display = 'block';
+                    showBlurBg(true);
+                } else {
+                    document.getElementById('main').style.display = 'block';
+                    document.getElementById('loginForm').style.display = 'none';
+                    document.getElementById('signupForm').style.display = 'none';
+                    document.getElementById('loginSuccess').style.display = 'none';
+                    document.getElementById('refund').style.display = 'none';
+                    showBlurBg(false);
+                }
+                
+                document.body.style.backgroundColor = 'var(--dark)';
+                
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Add animations on scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            const animateElements = document.querySelectorAll('.advantage, .section-title');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            animateElements.forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
