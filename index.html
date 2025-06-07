@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Firely</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
@@ -16,6 +17,7 @@
             --light: #F5F5F5;
             --gray: #1E1E1E;
             --success: #4BB543;
+            --star-color: #FFD700;
         }
         
         * {
@@ -373,6 +375,70 @@
             accent-color: var(--primary);
         }
         
+        /* Rating styles */
+        .rating-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+        
+        .rating-title {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .stars {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .star {
+            color: var(--star-color);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .star:hover {
+            transform: scale(1.2);
+        }
+        
+        .feedback-notification {
+            background-color: var(--success);
+            color: white;
+            padding: 1.2rem;
+            border-radius: 8px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            max-width: 400px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s;
+        }
+        
+        .feedback-notification i {
+            font-size: 1.3rem;
+        }
+        
+        .channel-info {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .channel-name {
+            font-size: 1.3rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+        
+        .channel-status {
+            font-size: 1.1rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -412,6 +478,10 @@
             .button {
                 width: 100%;
                 max-width: 300px;
+            }
+            
+            .form-container {
+                padding: 2rem;
             }
         }
     </style>
@@ -492,12 +562,28 @@
     <!-- Login Success -->
     <div class="container" id="loginSuccess" style="display: none;">
         <div class="form-container animate__animated animate__fadeIn">
-            <h2 class="form-title">Удаление канала</h2>
-            <p style="text-align: center; margin-bottom: 2rem; line-height: 1.6;">
-                Канал готовится к удалению.<br>
-                Это займет примерно трое суток, но может завершиться и раньше.
-            </p>
-            <a href="#refund" class="button" style="width: 100%; padding: 1rem;">Возврат средств</a>
+            <h2 class="form-title">Статус канала</h2>
+            
+            <div class="channel-info">
+                <div class="channel-name">t.me/kkrarken_music</div>
+                <div class="channel-status">Снесён</div>
+            </div>
+            
+            <div class="rating-container" id="ratingSection">
+                <div class="rating-title">Пожалуйста, поделитесь своим мнением</div>
+                <div class="stars">
+                    <i class="fas fa-star star" data-rating="1"></i>
+                    <i class="fas fa-star star" data-rating="2"></i>
+                    <i class="fas fa-star star" data-rating="3"></i>
+                    <i class="fas fa-star star" data-rating="4"></i>
+                    <i class="fas fa-star star" data-rating="5"></i>
+                </div>
+            </div>
+            
+            <div class="feedback-notification" id="feedbackNotification">
+                <i class="fas fa-check-circle"></i>
+                <span>Благодарим за отзыв! Ваше мнение помогает нам становиться лучше.</span>
+            </div>
         </div>
     </div>
     
@@ -596,6 +682,11 @@
                 hideAll();
                 document.getElementById('loginSuccess').style.display = 'block';
                 showBlurBg(true);
+                
+                // Check if feedback was already given
+                if (localStorage.getItem('hasGivenFeedback')) {
+                    document.getElementById('ratingSection').style.display = 'none';
+                }
             } else {
                 document.body.style.backgroundColor = '#1A0A0A';
                 document.getElementById('loginError').style.display = 'block';
@@ -634,6 +725,36 @@
                 alert('Для регистрации необходимо согласие с использованием cookies');
             }
         }
+        
+        // Handle rating stars
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.star');
+            const feedbackNotification = document.getElementById('feedbackNotification');
+            const ratingSection = document.getElementById('ratingSection');
+            
+            // Check if feedback was already given
+            if (localStorage.getItem('hasGivenFeedback')) {
+                ratingSection.style.display = 'none';
+            }
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = this.getAttribute('data-rating');
+                    
+                    // Save that feedback was given
+                    localStorage.setItem('hasGivenFeedback', 'true');
+                    
+                    // Show notification
+                    feedbackNotification.style.display = 'flex';
+                    
+                    // Hide rating section
+                    ratingSection.style.display = 'none';
+                    
+                    // Here you could send the rating to your server
+                    // sendRatingToServer(rating);
+                });
+            });
+        });
         
         // Handle anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
